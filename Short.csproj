@@ -8,5 +8,6 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="*"/>
     <PackageReference Include="MongoDB.Driver" Version="*"/>
     <PackageReference Include="MongoDB.Bson" Version="*"/>
+    <PackageReference Include="Serilog.AspNetCore" Version="*"/>
   </ItemGroup>
 </Project>

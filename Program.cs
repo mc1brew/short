@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-namespace kvinShort
+namespace Short
 {
     public class Program
     {
@@ -28,6 +28,7 @@ namespace kvinShort
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
