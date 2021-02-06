@@ -43,6 +43,16 @@ namespace Short.Controllers
 
             HttpClient client = new HttpClient();
             var responseMessage = client.GetAsync(Constants.FunctionUrls.GetUrl(name)).Result;
+
+            //The name not being found is a common case.
+            //Handle it gracefully by sending them to add the key for now.
+            //Later I'll add feedback to the front end.
+            if(responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                _logger.LogInformation($"Name: {name} was not found");
+                return Redirect(Constants.Configuration.AddUrl);
+            }
+
             responseMessage.EnsureSuccessStatusCode();
             var url = responseMessage.Content.ReadAsStringAsync().Result;
 
