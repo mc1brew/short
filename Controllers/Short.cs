@@ -38,6 +38,9 @@ namespace Short.Controllers
         [HttpGet("{name}")]
         public IActionResult Get(string name)
         {
+            if(name == Constants.Favicon)
+                return new OkResult();
+
             HttpClient client = new HttpClient();
             var responseMessage = client.GetAsync(Constants.FunctionUrls.GetUrl(name)).Result;
             responseMessage.EnsureSuccessStatusCode();

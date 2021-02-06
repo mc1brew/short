@@ -4,6 +4,7 @@ namespace Short
 {
     public static class Constants
     {
+        public readonly static string Favicon = "favicon.ico";
         public static class ConfigurationKeys
         {
             public readonly static string AddUrl = "AddUrl";
