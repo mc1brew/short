@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors;
 
-using MongoDB.Driver;
-using MongoDB.Bson;
+using System.Net.Http;
+
+
 
 namespace Short.Controllers
 {
@@ -21,35 +23,33 @@ namespace Short.Controllers
     public class Short : ControllerBase
     {
         private readonly ILogger<Short> _logger;
-        private readonly string _connectionString = "mongodb://localhost:27017";
-        private readonly string _databaseName = "short";
-        private readonly MongoClient _mongoClient;
-        private readonly IMongoDatabase _mongoDatabase;
 
         public Short(ILogger<Short> logger)
         {
             _logger = logger;
-            _mongoClient = new MongoClient(_connectionString);
-            _mongoDatabase = _mongoClient.GetDatabase(_databaseName);
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Redirect("http://www.k.vin");
+            return Redirect(Constants.Configuration.AddUrl);
         }
 
         [HttpGet("{name}")]
         public IActionResult Get(string name)
         {
-            var collection = _mongoDatabase.GetCollection<BsonDocument>("bar");
+            HttpClient client = new HttpClient();
+            var responseMessage = client.GetAsync(Constants.FunctionUrls.GetUrl(name)).Result;
+            responseMessage.EnsureSuccessStatusCode();
+            var url = responseMessage.Content.ReadAsStringAsync().Result;
 
-            var filter = Builders<BsonDocument>.Filter.Eq("Name", name);
-            var document = collection.Find(filter).First();
-
-            if(document["Url"] != null)
-                return Redirect(document["Url"].ToString());
-            return Redirect("http://www.k.vin");
+            if(string.IsNullOrEmpty(url))
+                Redirect(Constants.Configuration.AddUrl);
+            
+            //Todo: URL scrubbing and touching up will need to be more in depth later.
+            if(!url.StartsWith("http"))
+                url = $"https://{url}";
+            return Redirect(url);
         }
 
         [HttpPost]
@@ -76,19 +76,15 @@ namespace Short.Controllers
             _logger.LogInformation($"Creating link with Name: {link.Name} and Url: {link.Url}.");
 
             try{
-                var collection = _mongoDatabase.GetCollection<BsonDocument>("bar");
-
-                var document = new BsonDocument
-                {
-                    { "Name", link.Name},
-                    { "Url", link.Url}
-                };
-
-                collection.InsertOne(document);
+                HttpClient client = new HttpClient();
+                var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(link));
+                var responseMessage = client.PostAsync(Constants.FunctionUrls.AddUrl(), content).Result;
+                responseMessage.EnsureSuccessStatusCode();
+                var url = responseMessage.Content.ReadAsStringAsync().Result;
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, ex.InnerException.ToString());
+                _logger.LogError(ex, ex.Message.ToString());
                 throw ex;
             }            
         }
