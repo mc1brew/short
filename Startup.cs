@@ -50,6 +50,8 @@ namespace Short
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseCors();
