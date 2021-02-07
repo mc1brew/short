@@ -34,6 +34,7 @@ namespace Short
                     builder =>
                     {
                         builder.WithOrigins(Constants.Configuration.ClientOriginUrl)
+                        .AllowAnyMethod();
                         .AllowAnyHeader();
                     });
             });
