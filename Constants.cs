@@ -11,6 +11,7 @@ namespace Short
             public readonly static string ApiUrl = "ApiUrl";
             public readonly static string HostKey = "HostKey";
             public readonly static string ClientOriginUrl = "ClientOriginUrl";
+            public readonly static string RedirectUrl = "Shorter:RedirectUrl";
         }
 
         public static class Configuration
@@ -19,6 +20,7 @@ namespace Short
             public static string ApiUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.ApiUrl);
             public static string ClientOriginUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.ClientOriginUrl);
             public static string HostKey => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.HostKey);
+            public static string RedirectUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.RedirectUrl);
         }
 
         public static class FunctionUrls

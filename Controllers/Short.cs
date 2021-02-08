@@ -17,6 +17,11 @@ namespace Short.Controllers
         public string Url {get;set;}
     }
 
+    public class CreatLinkResult
+    {
+        public string RedirectUrl {get;set;}
+    }
+
     [ApiController]
     [Route("/")]
     public class Short : ControllerBase
@@ -65,7 +70,7 @@ namespace Short.Controllers
         }
 
         [HttpPost]
-        public void CreateLink([FromBody]Link link)
+        public IActionResult CreateLink([FromBody]Link link)
         {
             if(link == null)
             {
@@ -93,6 +98,9 @@ namespace Short.Controllers
                 var responseMessage = client.PostAsync(Constants.FunctionUrls.AddUrl(), content).Result;
                 responseMessage.EnsureSuccessStatusCode();
                 var url = responseMessage.Content.ReadAsStringAsync().Result;
+
+                string redirectUrl = $"{Constants.Configuration.RedirectUrl}/{link.Name}";
+                return new OkObjectResult(new CreatLinkResult{RedirectUrl = redirectUrl});
             }
             catch(Exception ex)
             {
