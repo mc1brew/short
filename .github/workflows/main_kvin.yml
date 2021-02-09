@@ -22,7 +22,7 @@ jobs:
         dotnet-version: '3.1.301'
 
     - name: Install npm packages
-      run: npm install --folder .\reactapp\
+      run: npm install -g --folder .\reactapp\
       
     - name: Build with npm
       run: npm run build --prefix ./reactapp
