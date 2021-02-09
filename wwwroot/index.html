@@ -5,41 +5,12 @@
         <meta content="utf-8" http-equiv="encoding">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Shorter</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
         <!--5.0-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="./scripts/kvin.js"></script>
     </head>
-
-    <script>
-        function AddUrl(url, shorter) {
-            fetch('/',
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    "name": shorter,
-                    "url": url
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                var alertTemplate = '<div class="alert alert-warning alert-dismissible fade show col-md-6 mx-auto" role="alert">Here is your short link: <strong><a id="redirectUrl" href={redirectUrl}>{redirectUrl}</a></strong><input type="text" value="{redirectUrl}" id="myInput" class="invisible"><button type="button" class="btn" aria-label="Copy" onclick="CopyUrl(\'{redirectUrl}\')">Copy</button><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                var alert = alertTemplate.replace('{redirectUrl}', data.redirectUrl).replace('{redirectUrl}', data.redirectUrl).replace('{redirectUrl}', data.redirectUrl).replace('{redirectUrl}', data.redirectUrl);
-                var element = document.getElementById("Feedback");
-                element.innerHTML = alert;
-            });
-        }
-
-        async function CopyUrl(redirectUrl)
-        {
-            await navigator.clipboard.writeText(redirectUrl);
-        }
-    </script>
     <body>
         <div class="container-sm">
             <div id="Feedback"></div>
@@ -47,7 +18,7 @@
                 <div class="mb-3"><label class="form-label">Url:</label><input id="urlInput" class="form-control" type="text" placeholder="www.k.vin"></div>
                 <div class="mb-3"><label class="form-label">Shorter:</label><input  id="shorterInput" class="form-control" type="text"\ placeholder="k"></div>
                 <div class="control">
-                    <button type="button" class="btn btn-primary" onclick="AddUrl(document.getElementById('urlInput').value, document.getElementById('shorterInput').value)">Add Url</button>
+                    <button type="button" class="btn btn-primary" onclick="new kvin.utilities().AddUrl(document.getElementById('urlInput').value, document.getElementById('shorterInput').value)">Add Url</button>
                 </div>
             </div>
         </div>
