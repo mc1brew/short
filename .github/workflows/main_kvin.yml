@@ -31,7 +31,7 @@ jobs:
       run: move .\node_modules\ .\reactapp\node_modules\
       
     - name: Build with npm
-      run: npm run build --prefix ./reactapp
+      run: npm run build --silent --prefix ./reactapp
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
