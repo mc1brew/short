@@ -20,12 +20,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.301'
+    
+    - name: Change Directory
+      run: cd .\reactapp
 
     - name: Install npm packages
-      run: npm install -g --folder .\reactapp\
+      run: npm install 
       
     - name: Build with npm
-      run: npm run build --prefix ./reactapp
+      run: npm run build
 
     - name: Build with dotnet
       run: dotnet build --configuration Release
