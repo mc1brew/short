@@ -21,18 +21,6 @@ jobs:
       with:
         dotnet-version: '3.1.301'
 
-    - name: Create a place to house modules
-      run: mkdir .\node_modules
-
-    - name: Install npm packages
-      run: npm install --folder .\reactapp\
-
-    - name: Relocate modules packages
-      run: move .\node_modules\ .\reactapp\node_modules\
-      
-    - name: Build with npm
-      run: npm run build --prefix ./reactapp
-
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
