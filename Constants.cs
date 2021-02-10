@@ -7,10 +7,9 @@ namespace Short
         public readonly static string Favicon = "favicon.ico";
         public static class ConfigurationKeys
         {
-            public readonly static string AddUrl = "AddUrl";
-            public readonly static string ApiUrl = "ApiUrl";
-            public readonly static string HostKey = "HostKey";
-            public readonly static string ClientOriginUrl = "ClientOriginUrl";
+            public readonly static string AddUrl = "Shorter:AddUrl";
+            public readonly static string ApiUrl = "Shorter:ApiUrl";
+            public readonly static string HostKey = "Shorter:HostKey";
             public readonly static string RedirectUrl = "Shorter:RedirectUrl";
         }
 
