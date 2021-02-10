@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Short
 {
@@ -43,6 +44,11 @@ namespace Short
             });
 
             services.AddControllers();
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "reactapp/build";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +67,7 @@ namespace Short
                     Path.Combine(env.ContentRootPath, "reactapp/build")),
                 RequestPath = ""
             });
+            app.UseSpaStaticFiles();
 
             app.UseRouting();
 
@@ -71,6 +78,16 @@ namespace Short
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "reactapp";
+                
+                if(env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
             });
         }
     }
