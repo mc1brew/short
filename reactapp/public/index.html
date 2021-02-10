@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+      (function () {
+        //Check to see if we should be forwarding somewhere first.
+        var pathname = window.location.pathname;
+        if(pathname != '/')
+        {
+          fetch('/api'+pathname,
+            {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.replace(data.redirectUrl)
+            });
+        }
+      })();
+    </script>
+
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
