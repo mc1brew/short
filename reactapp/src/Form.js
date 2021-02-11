@@ -37,7 +37,7 @@ class Form extends Component
                             />
                     </div>
                     <div className="control">
-                        <button type="button" className="btn btn-primary" onClick={() => this.addUrl()}>Add Url</button>
+                        <button type="button" className="btn btn-primary" onClick={() => this.createLink()}>Create Link</button>
                     </div>
             </form>
         )
@@ -51,7 +51,7 @@ class Form extends Component
         })
     }
 
-    addUrl = () => {
+    createLink = () => {
         this.renderResult('');
         
         fetch('/api',
@@ -66,7 +66,9 @@ class Form extends Component
             }
         })
         .then(response => response.json())
-        .then(data => this.renderResult(data.redirectUrl));
+        .then(data => {
+            this.renderResult(data.url)
+        });
     }
 }
 

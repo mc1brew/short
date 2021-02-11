@@ -17,11 +17,6 @@ namespace Short.Controllers
         public string Url {get;set;}
     }
 
-    public class CreatLinkResult
-    {
-        public string RedirectUrl {get;set;}
-    }
-
     [ApiController]
     [Route("api/")]
     public class Short : ControllerBase
@@ -48,21 +43,29 @@ namespace Short.Controllers
             if(responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 _logger.LogInformation($"Name: {name} was not found");
-                return Redirect(Constants.Configuration.AddUrl);
+                return Redirect(Constants.Configuration.CreateLinkPageUrl);
             }
 
             responseMessage.EnsureSuccessStatusCode();
-            var url = responseMessage.Content.ReadAsStringAsync().Result;
 
-            if(string.IsNullOrEmpty(url))
-                Redirect(Constants.Configuration.AddUrl);
+            string linkUrl = responseMessage.Content.ReadAsStringAsync().Result;
+            Link retrievedLink = new Link {Url = linkUrl};
+
+            if(string.IsNullOrEmpty(retrievedLink.Url))
+            {
+                //If this occurs in production that means I have missed a case for evaluating the input
+                //Or alternatively someone has found a way to add data to the data store.
+                //In either case this would be very bad.
+                _logger.LogError($"Record for Key: {name} was found but had no corresponding url.");
+                Redirect(Constants.Configuration.CreateLinkPageUrl);
+            }
+                
             
             //Todo: URL scrubbing and touching up will need to be more in depth later.
-            if(!url.StartsWith("http"))
-                url = $"https://{url}";
+            if(!retrievedLink.Url.StartsWith("http"))
+                retrievedLink.Url = $"https://{retrievedLink.Url}";
 
-            return new OkObjectResult(new {redirectUrl=url});
-            // return Redirect(url);
+            return new OkObjectResult(retrievedLink);
         }
 
         [HttpPost]
@@ -95,8 +98,8 @@ namespace Short.Controllers
                 responseMessage.EnsureSuccessStatusCode();
                 var url = responseMessage.Content.ReadAsStringAsync().Result;
 
-                string redirectUrl = $"{Constants.Configuration.RedirectUrl}/{link.Name}";
-                return new OkObjectResult(new CreatLinkResult{RedirectUrl = redirectUrl});
+                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{link.Name}";
+                return new OkObjectResult(new Link{Url = linkUrl});
             }
             catch(Exception ex)
             {

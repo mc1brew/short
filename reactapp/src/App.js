@@ -19,7 +19,7 @@ class App extends Component {
             })
             .then(response => response.json())
             .then(data => {
-                window.location.replace(data.redirectUrl)
+                window.location.replace(data.url)
             });
 
             return null;
