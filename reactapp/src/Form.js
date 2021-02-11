@@ -4,7 +4,7 @@ class Form extends Component
 {
     initialState = {url: '', name: ''}
     state = this.initialState
-    renderResult = this.props.renderResult
+    updateRedirectUrl = this.props.updateRedirectUrl
 
     render() {
         const {url, name} = this.state;
@@ -52,7 +52,7 @@ class Form extends Component
     }
 
     createLink = () => {
-        this.renderResult('');
+        this.updateRedirectUrl('');
         
         fetch('/api',
         {
@@ -67,7 +67,7 @@ class Form extends Component
         })
         .then(response => response.json())
         .then(data => {
-            this.renderResult(data.url)
+            this.updateRedirectUrl(data.url)
         });
     }
 }
