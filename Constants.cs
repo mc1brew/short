@@ -7,31 +7,29 @@ namespace Short
         public readonly static string Favicon = "favicon.ico";
         public static class ConfigurationKeys
         {
-            public readonly static string AddUrl = "AddUrl";
-            public readonly static string ApiUrl = "ApiUrl";
-            public readonly static string HostKey = "HostKey";
-            public readonly static string ClientOriginUrl = "ClientOriginUrl";
-            public readonly static string RedirectUrl = "Shorter:RedirectUrl";
+            public readonly static string CreateLinkPageUrl = "Shorter:CreateLinkPageUrl";
+            public readonly static string DataStoreApiUrl = "Shorter:DataStoreApiUrl";
+            public readonly static string DataStoreHostKey = "Shorter:DataStoreHostKey";
+            public readonly static string ForwardLinkUrl = "Shorter:ForwardLinkUrl";
         }
 
         public static class Configuration
         {
-            public static string AddUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.AddUrl);
-            public static string ApiUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.ApiUrl);
-            public static string ClientOriginUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.ClientOriginUrl);
-            public static string HostKey => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.HostKey);
-            public static string RedirectUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.RedirectUrl);
+            public static string CreateLinkPageUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.CreateLinkPageUrl);
+            public static string DataStoreApiUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.DataStoreApiUrl);
+            public static string DataStoreHostkey => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.DataStoreHostKey);
+            public static string ForwardLinkUrl => Startup.StaticConfig.GetValue<string>(Constants.ConfigurationKeys.ForwardLinkUrl);
         }
 
         public static class FunctionUrls
         {
             
             public static string GetUrl(string name) {
-                return $"{Configuration.ApiUrl}/GetUrl?code={Configuration.HostKey}&name={name}";
+                return $"{Configuration.DataStoreApiUrl}/GetUrl?code={Configuration.DataStoreHostkey}&name={name}";
             }
 
             public static string AddUrl() {
-                return $"{Configuration.ApiUrl}/AddUrl?code={Configuration.HostKey}";
+                return $"{Configuration.DataStoreApiUrl}/AddUrl?code={Configuration.DataStoreHostkey}";
             }
         }
     }
