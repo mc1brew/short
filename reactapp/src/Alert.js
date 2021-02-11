@@ -12,10 +12,11 @@ class Alert extends Component
             return null;
 
         return(
-            <div className="alert alert-warning alert-dismissible fade show col-md-6 mx-auto" role="alert">
-                <strong>Short link: <a id="redirectUrl" href={redirectUrl}>{redirectUrl}</a></strong>
-                <button type="button" className="btn" aria-label="Copy" onClick= {() => this.copyUrl(redirectUrl)}>Copy</button>
-                <button type="button" className="btn-close" aria-label="Close" onClick= {() => this.close()}></button>
+            <div className="alert alert-success alert-dismissible fade show col-md-6 mx-auto" role="alert">
+                <div className="d-flex justify-content-between">
+                    <p className="justify"><strong class="text-success">Short link: <a id="redirectUrl" href={redirectUrl}>{redirectUrl}</a></strong></p>
+                    <button type="button" className="btn btn-success float-right" aria-label="Copy" onClick= {() => this.copyUrl(redirectUrl)}>Copy</button>
+                </div>
             </div>
         )
     }
@@ -23,6 +24,7 @@ class Alert extends Component
     async copyUrl(redirectUrl)
     {
         await navigator.clipboard.writeText(redirectUrl);
+        this.close();
     }
 
     close()
