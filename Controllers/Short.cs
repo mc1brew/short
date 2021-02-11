@@ -23,7 +23,7 @@ namespace Short.Controllers
     }
 
     [ApiController]
-    [Route("/")]
+    [Route("api/")]
     public class Short : ControllerBase
     {
         private readonly ILogger<Short> _logger;
@@ -31,12 +31,6 @@ namespace Short.Controllers
         public Short(ILogger<Short> logger)
         {
             _logger = logger;
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Redirect(Constants.Configuration.AddUrl);
         }
 
         [HttpGet("{name}")]
@@ -66,7 +60,9 @@ namespace Short.Controllers
             //Todo: URL scrubbing and touching up will need to be more in depth later.
             if(!url.StartsWith("http"))
                 url = $"https://{url}";
-            return Redirect(url);
+
+            return new OkObjectResult(new {redirectUrl=url});
+            // return Redirect(url);
         }
 
         [HttpPost]

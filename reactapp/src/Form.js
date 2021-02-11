@@ -54,7 +54,7 @@ class Form extends Component
     addUrl = () => {
         this.renderResult('');
         
-        fetch('/',
+        fetch('/api',
         {
             method: 'POST',
             body: JSON.stringify({
