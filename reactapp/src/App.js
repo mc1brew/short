@@ -22,7 +22,11 @@ class App extends Component {
                 window.location.replace(data.url)
             });
 
-            return null;
+            return (
+            <div className="alert alert-primary alert-dismissible fade show col-md-6 mx-auto" role="alert">
+                <strong>You are being redirected. Your site will load shortly.</strong>
+            </div>
+            )
         }
 
         return (
