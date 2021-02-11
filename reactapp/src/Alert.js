@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 
 class Alert extends Component
 {
-    renderResult = this.props.renderResult
+    updateRedirectUrl = this.props.updateRedirectUrl
     redirectUrl = this.props.redirectUrl
 
     render(){
@@ -14,7 +14,7 @@ class Alert extends Component
         return(
             <div className="alert alert-success alert-dismissible fade show col-md-6 mx-auto" role="alert">
                 <div className="d-flex justify-content-between">
-                    <p className="justify"><strong class="text-success">Short link: <a id="redirectUrl" href={redirectUrl}>{redirectUrl}</a></strong></p>
+                    <p className="justify"><strong className="text-success">Short link: <a id="redirectUrl" href={redirectUrl}>{redirectUrl}</a></strong></p>
                     <button type="button" className="btn btn-success float-right" aria-label="Copy" onClick= {() => this.copyUrl(redirectUrl)}>Copy</button>
                 </div>
             </div>
@@ -29,7 +29,7 @@ class Alert extends Component
 
     close()
     {
-        this.renderResult('');
+        this.updateRedirectUrl('');
     }
 }
 
