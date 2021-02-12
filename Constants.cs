@@ -24,11 +24,11 @@ namespace Short
         public static class FunctionUrls
         {
             
-            public static string GetUrl(string name) {
+            public static string GetLink(string name) {
                 return $"{Configuration.DataStoreApiUrl}/GetLink?code={Configuration.DataStoreHostkey}&name={name}";
             }
 
-            public static string AddUrl() {
+            public static string AddLink() {
                 return $"{Configuration.DataStoreApiUrl}/CreateLink?code={Configuration.DataStoreHostkey}";
             }
         }
