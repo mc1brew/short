@@ -35,7 +35,7 @@ namespace Short.Controllers
                 return new OkResult();
 
             HttpClient client = new HttpClient();
-            var responseMessage = client.GetAsync(Constants.FunctionUrls.GetUrl(name)).Result;
+            var responseMessage = client.GetAsync(Constants.FunctionUrls.GetLink(name)).Result;
 
             //The name not being found is a common case.
             //Handle it gracefully by sending them to add the key for now.
@@ -94,7 +94,7 @@ namespace Short.Controllers
             try{
                 HttpClient client = new HttpClient();
                 var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(link));
-                var responseMessage = client.PostAsync(Constants.FunctionUrls.AddUrl(), content).Result;
+                var responseMessage = client.PostAsync(Constants.FunctionUrls.AddLink(), content).Result;
                 responseMessage.EnsureSuccessStatusCode();
                 var url = responseMessage.Content.ReadAsStringAsync().Result;
 
