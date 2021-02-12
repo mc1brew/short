@@ -25,11 +25,11 @@ namespace Short
         {
             
             public static string GetUrl(string name) {
-                return $"{Configuration.DataStoreApiUrl}/GetUrl?code={Configuration.DataStoreHostkey}&name={name}";
+                return $"{Configuration.DataStoreApiUrl}/GetLink?code={Configuration.DataStoreHostkey}&name={name}";
             }
 
             public static string AddUrl() {
-                return $"{Configuration.DataStoreApiUrl}/AddUrl?code={Configuration.DataStoreHostkey}";
+                return $"{Configuration.DataStoreApiUrl}/CreateLink?code={Configuration.DataStoreHostkey}";
             }
         }
     }
