@@ -28,7 +28,7 @@ namespace Short
                 return $"{Configuration.DataStoreApiUrl}/GetLink?code={Configuration.DataStoreHostkey}&name={name}";
             }
 
-            public static string AddLink() {
+            public static string CreateLink() {
                 return $"{Configuration.DataStoreApiUrl}/CreateLink?code={Configuration.DataStoreHostkey}";
             }
         }

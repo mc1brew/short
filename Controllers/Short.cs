@@ -69,36 +69,44 @@ namespace Short.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateLink([FromBody]Link link)
+        public IActionResult CreateLink([FromBody]Link linkToCreate)
         {
-            if(link == null)
+            if(linkToCreate == null)
             {
-                _logger.LogError("link was null.");
-                throw new ArgumentNullException("Link was null.");
+                string msg = $"{nameof(Link)} was null";
+                _logger.LogWarning(msg);
+                return new BadRequestObjectResult(new {error = msg});
             }
             
-            if(string.IsNullOrEmpty(link.Key))
+            if(string.IsNullOrEmpty(linkToCreate.Key))
             {
-                _logger.LogError("link.Name was null.");
-                throw new ArgumentNullException("link.Name was null.");
+                string msg = $"{nameof(Link.Key)} was null";
+                _logger.LogWarning(msg);
+                return new BadRequestObjectResult(new {error = msg});
             }
 
-            if(string.IsNullOrEmpty(link.Url))
+            if(string.IsNullOrEmpty(linkToCreate.Url))
             {
-                _logger.LogError("link.Url was null.");
-                throw new ArgumentNullException("link.Url was null.");
+                string msg = $"{nameof(Link.Url)} was null";
+                _logger.LogWarning(msg);
+                return new BadRequestObjectResult(new {error = msg});
             }
 
-            _logger.LogInformation($"Creating link with Name: {link.Key} and Url: {link.Url}.");
+            _logger.LogInformation($"Creating {nameof(Link)} with {nameof(Link.Key)}: {linkToCreate.Key} and {nameof(Link.Url)}: {linkToCreate.Url}.");
 
             try{
                 HttpClient client = new HttpClient();
-                var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(link));
-                var responseMessage = client.PostAsync(Constants.FunctionUrls.AddLink(), content).Result;
+                var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(linkToCreate));
+                var responseMessage = client.PostAsync(Constants.FunctionUrls.CreateLink(), content).Result;
                 responseMessage.EnsureSuccessStatusCode();
+
+                //**************************************
+                //          Start here Kevin!
+                //**************************************
+
                 var url = responseMessage.Content.ReadAsStringAsync().Result;
 
-                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{link.Key}";
+                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{linkToCreate.Key}";
                 return new OkObjectResult(new Link{Url = linkUrl});
             }
             catch(Exception ex)
