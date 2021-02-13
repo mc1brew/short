@@ -13,7 +13,7 @@ namespace Short.Controllers
 {
     public class Link
     {
-        public string Name {get;set;}
+        public string Key {get;set;}
         public string Url {get;set;}
     }
 
@@ -77,7 +77,7 @@ namespace Short.Controllers
                 throw new ArgumentNullException("Link was null.");
             }
             
-            if(string.IsNullOrEmpty(link.Name))
+            if(string.IsNullOrEmpty(link.Key))
             {
                 _logger.LogError("link.Name was null.");
                 throw new ArgumentNullException("link.Name was null.");
@@ -89,7 +89,7 @@ namespace Short.Controllers
                 throw new ArgumentNullException("link.Url was null.");
             }
 
-            _logger.LogInformation($"Creating link with Name: {link.Name} and Url: {link.Url}.");
+            _logger.LogInformation($"Creating link with Name: {link.Key} and Url: {link.Url}.");
 
             try{
                 HttpClient client = new HttpClient();
@@ -98,7 +98,7 @@ namespace Short.Controllers
                 responseMessage.EnsureSuccessStatusCode();
                 var url = responseMessage.Content.ReadAsStringAsync().Result;
 
-                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{link.Name}";
+                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{link.Key}";
                 return new OkObjectResult(new Link{Url = linkUrl});
             }
             catch(Exception ex)
