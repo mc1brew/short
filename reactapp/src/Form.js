@@ -2,12 +2,12 @@ import React, {Component} from 'react'
 
 class Form extends Component
 {
-    initialState = {url: '', name: ''}
+    initialState = {url: '', key: ''}
     state = this.initialState
     updateRedirectUrl = this.props.updateRedirectUrl
 
     render() {
-        const {url, name} = this.state;
+        const {url, key} = this.state;
         return (
             <form className="form col-md-6 mx-auto">
                     <div className="mb-3">
@@ -26,13 +26,13 @@ class Form extends Component
                     <div className="mb-3">
                         <label htmlFor="name" className="form-label">Shorter:</label>
                         <input
-                            id="name"
+                            id="key"
                             className="form-control"
                             type="text"
                             placeholder="k"
                             
-                            name="name"
-                            value={name}
+                            name="key"
+                            value={key}
                             onChange={this.handleChange}
                             />
                     </div>
@@ -58,8 +58,8 @@ class Form extends Component
         {
             method: 'POST',
             body: JSON.stringify({
-                "name": this.state.name,
-                "url": this.state.url
+                "key": this.state.key,
+                "targetUrl": this.state.url
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ class Form extends Component
         })
         .then(response => response.json())
         .then(data => {
-            this.updateRedirectUrl(data.url)
+            this.updateRedirectUrl(data.shortenedUrl)
         });
     }
 }

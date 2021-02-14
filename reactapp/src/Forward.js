@@ -25,7 +25,7 @@ class Forward extends Component
             })
             .then(response => response.json())
             .then(data => {
-                window.location.replace(data.url)
+                window.location.replace(data.targetUrl)
             });
     }
 }

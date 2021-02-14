@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 
-namespace Short
+namespace Kvin.Short
 {
     public class Program
     {
