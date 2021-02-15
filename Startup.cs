@@ -15,7 +15,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
-namespace Short
+namespace Kvin.Short
 {
     public class Startup
     {

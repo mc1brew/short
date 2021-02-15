@@ -9,14 +9,8 @@ using System.Net.Http;
 
 
 
-namespace Short.Controllers
-{
-    public class Link
-    {
-        public string Name {get;set;}
-        public string Url {get;set;}
-    }
-
+namespace Kvin.Short.Controllers
+{    
     [ApiController]
     [Route("api/")]
     public class Short : ControllerBase
@@ -28,78 +22,86 @@ namespace Short.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{name}")]
-        public IActionResult Get(string name)
+        [HttpGet("{key}")]
+        public IActionResult Get(string key)
         {
-            if(name == Constants.Favicon)
+            if(key == Constants.Favicon)
                 return new OkResult();
 
             HttpClient client = new HttpClient();
-            var responseMessage = client.GetAsync(Constants.FunctionUrls.GetLink(name)).Result;
+            var responseMessage = client.GetAsync(Constants.FunctionUrls.GetLink(key)).Result;
 
             //The name not being found is a common case.
             //Handle it gracefully by sending them to add the key for now.
             //Later I'll add feedback to the front end.
             if(responseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                _logger.LogInformation($"Name: {name} was not found");
+                _logger.LogInformation($"Name: {key} was not found");
                 return Redirect(Constants.Configuration.CreateLinkPageUrl);
             }
 
             responseMessage.EnsureSuccessStatusCode();
 
-            string linkUrl = responseMessage.Content.ReadAsStringAsync().Result;
-            Link retrievedLink = new Link {Url = linkUrl};
+            string getLinkResponse = responseMessage.Content.ReadAsStringAsync().Result;
+            Link retrievedLink = Newtonsoft.Json.JsonConvert.DeserializeObject<Link>(getLinkResponse);
 
-            if(string.IsNullOrEmpty(retrievedLink.Url))
+            if(string.IsNullOrEmpty(retrievedLink.TargetUrl))
             {
                 //If this occurs in production that means I have missed a case for evaluating the input
                 //Or alternatively someone has found a way to add data to the data store.
                 //In either case this would be very bad.
-                _logger.LogError($"Record for Key: {name} was found but had no corresponding url.");
+                _logger.LogError($"Record for Key: {key} was found but had no corresponding url.");
                 Redirect(Constants.Configuration.CreateLinkPageUrl);
             }
                 
             
             //Todo: URL scrubbing and touching up will need to be more in depth later.
-            if(!retrievedLink.Url.StartsWith("http"))
-                retrievedLink.Url = $"https://{retrievedLink.Url}";
+            if(!retrievedLink.TargetUrl.StartsWith("http"))
+                retrievedLink.TargetUrl = $"https://{retrievedLink.TargetUrl}";
 
             return new OkObjectResult(retrievedLink);
         }
 
         [HttpPost]
-        public IActionResult CreateLink([FromBody]Link link)
+        public IActionResult CreateLink([FromBody]Link linkToCreate)
         {
-            if(link == null)
+            if(linkToCreate == null)
             {
-                _logger.LogError("link was null.");
-                throw new ArgumentNullException("Link was null.");
+                string msg = $"{nameof(Link)} was null";
+                _logger.LogWarning(msg);
+                return new BadRequestObjectResult(new {error = msg});
             }
             
-            if(string.IsNullOrEmpty(link.Name))
+            if(string.IsNullOrEmpty(linkToCreate.Key))
             {
-                _logger.LogError("link.Name was null.");
-                throw new ArgumentNullException("link.Name was null.");
+                string msg = $"{nameof(Link.Key)} was null";
+                _logger.LogWarning(msg);
+                return new BadRequestObjectResult(new {error = msg});
             }
 
-            if(string.IsNullOrEmpty(link.Url))
+            if(string.IsNullOrEmpty(linkToCreate.TargetUrl))
             {
-                _logger.LogError("link.Url was null.");
-                throw new ArgumentNullException("link.Url was null.");
+                string msg = $"{nameof(Link.TargetUrl)} was null";
+                _logger.LogWarning(msg);
+                return new BadRequestObjectResult(new {error = msg});
             }
 
-            _logger.LogInformation($"Creating link with Name: {link.Name} and Url: {link.Url}.");
+            _logger.LogInformation($"Creating {nameof(Link)} with {nameof(Link.Key)}: {linkToCreate.Key} and {nameof(Link.TargetUrl)}: {linkToCreate.TargetUrl}.");
 
             try{
                 HttpClient client = new HttpClient();
-                var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(link));
-                var responseMessage = client.PostAsync(Constants.FunctionUrls.AddLink(), content).Result;
+                var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(linkToCreate));
+                var responseMessage = client.PostAsync(Constants.FunctionUrls.CreateLink(), content).Result;
                 responseMessage.EnsureSuccessStatusCode();
+
+                //**************************************
+                //          Start here Kevin!
+                //**************************************
+
                 var url = responseMessage.Content.ReadAsStringAsync().Result;
 
-                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{link.Name}";
-                return new OkObjectResult(new Link{Url = linkUrl});
+                string linkUrl = $"{Constants.Configuration.ForwardLinkUrl}/{linkToCreate.Key}";
+                return new OkObjectResult(new Link{ShortenedUrl = linkUrl});
             }
             catch(Exception ex)
             {

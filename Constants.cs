@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace Short
+namespace Kvin.Short
 {
     public static class Constants
     {
@@ -25,10 +25,10 @@ namespace Short
         {
             
             public static string GetLink(string name) {
-                return $"{Configuration.DataStoreApiUrl}/GetLink?code={Configuration.DataStoreHostkey}&name={name}";
+                return $"{Configuration.DataStoreApiUrl}/GetLink?code={Configuration.DataStoreHostkey}&{nameof(Link.Key)}={name}";
             }
 
-            public static string AddLink() {
+            public static string CreateLink() {
                 return $"{Configuration.DataStoreApiUrl}/CreateLink?code={Configuration.DataStoreHostkey}";
             }
         }
